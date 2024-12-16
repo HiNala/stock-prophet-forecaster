@@ -1,21 +1,13 @@
-# Python
+# Python cache files
 **/__pycache__/
 **/*.py[cod]
 **/*$py.class
 *.so
 .Python
+
+# Build and distribution
 build/
-develop-eggs/
 dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -26,28 +18,21 @@ env/
 ENV/
 .env
 
-# IDE
+# IDE settings
 .idea/
 .vscode/
 *.swp
 *.swo
-.project
-.pydevproject
-.settings/
 
 # Logs and databases
 *.log
 *.sqlite
 *.db
-output/logs/
 
-# Output files
-output/
-**/output/
-models/
-*.pkl
-*.h5
-*.html
+# Temporary output and cache
+temp/
+cache/
+output/logs/
 
 # OS generated files
 .DS_Store
@@ -58,12 +43,22 @@ models/
 ehthumbs.db
 Thumbs.db
 
-# Project specific
-*.csv
-*.json
+# Data files (to prevent committing sensitive data)
+data/*.csv
+data/*.json
+!data/sample_data.csv  # Allow sample data
+
+# Model artifacts
+*.pkl
+*.h5
+
+# Configuration
 *.yaml
 *.yml
-!config.yaml
-!config.yml
-temp/
-cache/ 
+!config.yaml  # Allow main config
+!config.yml   # Allow main config
+
+# Keep all source code
+!src/**/*.py
+!tests/**/*.py
+!scripts/**/*.py
