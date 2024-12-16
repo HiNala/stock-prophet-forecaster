@@ -392,7 +392,7 @@ class Forecaster:
             recent_returns = pd.Series(np.diff(np.log(self._original_prices[-30:])))
             recent_volatility = recent_returns.ewm(span=10).std().iloc[-1] * np.sqrt(252)
             recent_trend = recent_returns.ewm(span=10).mean().iloc[-1] * 252
-            trend_consistency = data['trend_consistency'].tail(30).mean()
+            trend_consistency = df['trend_consistency'].tail(30).mean() if 'trend_consistency' in df.columns else 0.5
             trend_strength = abs(recent_trend)
             
             # Define potential regressors with their characteristics
@@ -967,7 +967,8 @@ class Forecaster:
             # Define expected new feature columns
             new_feature_columns = {
                 'price_momentum', 'trend_acceleration', 
-                'volume_price_impact', 'trend_regime'
+                'volume_price_impact', 'trend_regime',
+                'trend_consistency'  # Add trend_consistency to expected features
             }
             
             # Define all expected columns after calculation
@@ -1015,6 +1016,22 @@ class Forecaster:
             )
             track_columns("trend_acceleration")
             logger.debug(f"NaN count in trend_acceleration: {df['trend_acceleration'].isna().sum()}")
+            
+            # Calculate trend consistency
+            if 'returns' in df.columns:
+                # Calculate the sign of returns
+                returns_sign = np.sign(df['returns'].fillna(0))
+                # Calculate rolling window of consistent trend direction
+                window_size = 20
+                df['trend_consistency'] = (
+                    returns_sign.rolling(window=window_size, min_periods=1)
+                    .apply(lambda x: abs(x.sum()) / len(x))
+                    .fillna(0)
+                )
+            else:
+                df['trend_consistency'] = 0.0
+            track_columns("trend_consistency")
+            logger.debug(f"NaN count in trend_consistency: {df['trend_consistency'].isna().sum()}")
             
             # Calculate volume price impact if possible
             if 'volume' in df.columns and 'returns' in df.columns:
