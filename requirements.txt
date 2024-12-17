@@ -1,0 +1,10 @@
+pandas>=1.5.3
+numpy>=1.24.2
+prophet>=1.1.4
+yfinance>=0.2.18
+plotly>=5.13.1
+dash>=2.9.3
+dash-bootstrap-components>=1.4.1
+scikit-learn>=1.2.2
+ta>=0.10.2
+python-dotenv>=1.0.0 
